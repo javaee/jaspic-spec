@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,16 +40,11 @@
 
 package javax.security.auth.message;
 
-import java.util.Map;
-
 /**
  * The AuthStatus class is used to represent return values from Authentication
  * modules and Authentication Contexts. An AuthStatus value is returned when 
  * the module processing has established a corresponding request or response 
  * message within the message parameters exchanged with the runtime.
- *
- * @version %I%, %G%
- * @see Map
  */
 
 public class AuthStatus {
@@ -91,16 +86,21 @@ public class AuthStatus {
      */
     public static final AuthStatus SEND_CONTINUE = new AuthStatus(5);
 
-    private int v;
-
-    private AuthStatus() {
-	v = 1;
-    }
+    private final int v;
 
     private AuthStatus(int value) {
 	v = value;
     }
 
+    @Override
+    public String toString() {
+        switch (v) {
+        case 1: return "AuthStatus.SUCCESS";
+        case 2: return "AuthStatus.FAILURE";
+        case 3: return "AuthStatus.SEND_SUCCESS";
+        case 4: return "AuthStatus.SEND_FAILUR";
+        case 5: return "AuthStatus.SEND_CONTINUE";
+        default: return "Unknown AuthStatus";
+        }
+    }
 }
-
-
