@@ -61,7 +61,8 @@
         <vendor.name>Oracle Corporation</vendor.name>
         <implementation.vendor.id>org.glassfish</implementation.vendor.id>
         <findbugs.version>2.4.0</findbugs.version>
-        <findbugs.exclude></findbugs.exclude>
+        <findbugs.skip>false</findbugs.skip>
+        <findbugs.exclude>exclude-common.xml</findbugs.exclude>
         <findbugs.threshold>Low</findbugs.threshold>
     </properties>
     <name>Java Authentication Service Provider Interface for Containers API ${spec.version}</name>
