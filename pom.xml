@@ -122,6 +122,7 @@
                 <directory>src/main/resources</directory>
                 <excludes>
                     <exclude>META-INF/README</exclude>
+                    <exclude>${findbugs.exclude}</exclude>
                 </excludes>
             </resource>
         </resources>        
