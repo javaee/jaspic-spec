@@ -39,6 +39,7 @@
  */
 
 package javax.security.auth.message.config;
+
 import javax.security.auth.message.MessageInfo;
 
 /**
@@ -57,7 +58,6 @@ public interface AuthConfig {
      * the configuration object pertains to an unspecified message layer.
      */
     String getMessageLayer();
-
 
     /**
      * Get the application context identifier of this authentication 
@@ -88,14 +88,13 @@ public interface AuthConfig {
     public String getAuthContextID(MessageInfo messageInfo);
 
     /**
-     * Causes a dynamic anthentication context configuration object to 
+     * Causes a dynamic authentication context configuration object to 
      * update the internal state that it uses to process calls to its
      * <code>getAuthContext</code> method.
      *
-     * @exception AuthException If an error occured during the update.
-     *
      * @exception SecurityException If the caller does not have permission
-     *		to refresh the configuration object.
+     *		to refresh the configuration object, or if an error occurred 
+     *          during the update.
      */
     public void refresh();
 

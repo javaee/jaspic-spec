@@ -131,25 +131,72 @@ public abstract class AuthConfigFactory {
      */
     public static final String DEFAULT_FACTORY_SECURITY_PROPERTY = 
     "authconfigprovider.factory";
+    
+    /**
+     * The name of the Security property used to control operations within
+     * the factory.
+     */
+    private static final String PROVIDER_SECURITY_PROPERTY = 
+    "authconfigfactory.provider";
 
-    // XXX verify that key need not include java.security.
- 
-    private static SecurityPermission getPerm = 
-	new SecurityPermission
-    ("getProperty."+DEFAULT_FACTORY_SECURITY_PROPERTY);
+    /**
+     * The name of the SecurityPermission required to call getFactory
+     */
 
-    private static SecurityPermission setPerm = 
-	new SecurityPermission
-    ("setProperty."+DEFAULT_FACTORY_SECURITY_PROPERTY);
+    public static final String GET_FACTORY_PERMISSION_NAME =
+        ("getProperty."+DEFAULT_FACTORY_SECURITY_PROPERTY);
+    
+    /**
+     * The name of the SecurityPermission required to call setFactory
+     */
 
+    public static final String SET_FACTORY_PERMISSION_NAME = 
+        ("setProperty."+DEFAULT_FACTORY_SECURITY_PROPERTY);
+    
+    /**
+     * The name of the SecurityPermission to be used to authorize access to the 
+     * update methods of the factory implementation class.  
+     */
+
+    public static final String PROVIDER_REGISTRATION_PERMISSION_NAME = 
+        ("setProperty."+PROVIDER_SECURITY_PROPERTY);
+
+    /**
+     * The SecurityPermission,
+     * with name {@link #GET_FACTORY_PERMISSION_NAME}, 
+     * that is used to authorize access to the getFactory method.
+     */
+    
+    public static final SecurityPermission getFactorySecurityPermission = 
+	new SecurityPermission(GET_FACTORY_PERMISSION_NAME);
+
+    /**
+     * The SecurityPermission,
+     * with name {@link #SET_FACTORY_PERMISSION_NAME}, 
+     * that is used to authorize access to the setFactory method.
+     */
+    
+    public static final SecurityPermission setFactorySecurityPermission = 
+	new SecurityPermission(SET_FACTORY_PERMISSION_NAME);
+    
+    /**
+     * An instance of the SecurityPermission (with name 
+     * {@link #PROVIDER_REGISTRATION_PERMISSION_NAME})
+     * for use in authorizing access to the update methods of the factory
+     * implementation class.
+     */
+
+     public static final SecurityPermission providerRegistrationSecurityPermission = 
+	new SecurityPermission(PROVIDER_REGISTRATION_PERMISSION_NAME);
+    
     /**
      * utility method to check for permission to operate on the factory.
      *
-     * @exception SecurityException if the caller does not have
-     *		permission to operate on the factory.
+     * @exception SecurityException if the SecurityManager is enabled and
+     *          the calling access control context has not been granted
+     *          the argument permission.
      */
-    private static void checkPermission(Permission p) 
-	throws SecurityException {
+    private static void checkPermission(Permission p) throws SecurityException {
 	SecurityManager sm = System.getSecurityManager();
 	if (sm != null) {
 	    sm.checkPermission(p);
@@ -164,8 +211,8 @@ public abstract class AuthConfigFactory {
      * for example, with <code>setFactory</code>, it will be returned. Otherwise, an
      * attempt will be made to construct an instance of the default
      * AuthConfigFactory implementation class. The fully qualified class name
-     * of the default factory implementation class is obtained from the
-     * value of the authconfigprovider.factory security property. When an
+     * of the default factory implementation class is obtained from the value of
+     * the {@link #DEFAULT_FACTORY_SECURITY_PROPERTY} security property. When an
      * instance of the default factory implementation class is successfully
      * constructed by this method, this method will set it as the system-wide 
      * factory instance.
@@ -173,6 +220,12 @@ public abstract class AuthConfigFactory {
      * <p> The absolute pathname of the Java security properties file is
      * JAVA_HOME/lib/security/java.security, where JAVA_HOME
      * refers to the directory where the JDK was installed.
+     * 
+     * <p>When a SecurityManager is enabled, the  
+     * {@link #getFactorySecurityPermission} will be required to call this 
+     * method. If at the time of the call, a system-wide factory instance has
+     * not already been defined, then the {@link #setFactorySecurityPermission}
+     * will also be required.
      *
      * @return The non-null system-wide AuthConfigFactory instance set at the 
      *          time of the call, or if that value was null, the value of the
@@ -181,22 +234,20 @@ public abstract class AuthConfigFactory {
      *          defined when this method was called and no default factory name
      *          was defined via the security property. 
      *
-     * @exception AuthException If an error occurred during the class loading, 
-     *          or construction of the default AuthConfigFactory
-     *          implementation class.
-     *
      * @exception SecurityException If the caller does not have permission
      *		to retrieve the factory, or set it as the system-wide 
-     *          instance.
-     *
+     *          instance. Also thrown if an exception was thrown during the
+     *          class loading, or construction of the default AuthConfigFactory
+     *          implementation class; in which case the SecurityException will
+     *          contain the root Exception as its cause.
      */
     public static synchronized AuthConfigFactory getFactory() {
-	checkPermission(getPerm);
+	checkPermission(getFactorySecurityPermission);
 	if (AuthConfigFactory.factory == null) {
 	    final String className = Security.getProperty
 		(DEFAULT_FACTORY_SECURITY_PROPERTY);
 	    if (className != null) {
-		checkPermission(setPerm);
+		checkPermission(setFactorySecurityPermission);
 		try {
 		    AuthConfigFactory.factory = (AuthConfigFactory)
 			java.security.AccessController.doPrivileged
@@ -236,7 +287,7 @@ public abstract class AuthConfigFactory {
      *		permission to set the factory.
      */
     public static synchronized void setFactory(AuthConfigFactory factory) {
-	checkPermission(setPerm);
+	checkPermission(setFactorySecurityPermission);
 	AuthConfigFactory.factory = factory;
     }
 
@@ -333,6 +384,12 @@ public abstract class AuthConfigFactory {
      * declarative representation of provider registrations employed by the 
      * factory constructor.
      *
+     * <P>When a SecurityManager is enabled, before loading the argument 
+     * provider, and before making any changes to the factory, this method must
+     * confirm that the calling access control context has been granted the 
+     * {@link #providerRegistrationSecurityPermission}
+     *     
+     * 
      * @param className The fully qualified name of an AuthConfigProvider
      *          implementation class (or null). Calling this method with a 
      *          null value for this parameter shall cause 
@@ -344,7 +401,7 @@ public abstract class AuthConfigFactory {
      *          properties to be passed to the properties argument of the
      *          provider constructor.
      *          This argument may be null. When this argument is not null, 
-     *          all the values and keys occuring in the Map must be of 
+     *          all the values and keys occurring in the Map must be of 
      *          type String.
      *
      * @param layer A String identifying the message layer
@@ -366,11 +423,10 @@ public abstract class AuthConfigFactory {
      *          used to remove the registration from the factory.
      *
      * @exception SecurityException If the caller does not have
-     *		permission to register a provider at the factory.
+     *		permission to register a provider at the factory, or if the
+     *          the provider construction (given a non-null 
+     *          <code>className</code>) or registration fails.
      *
-     * @exception AuthException If the provider 
-     *          construction (given a non-null <code>className</code>) 
-     *          or registration fails.
      */
     public abstract String 
     registerConfigProvider(String className,
@@ -402,6 +458,11 @@ public abstract class AuthConfigFactory {
      * whose message layer and or appContext identifier differ from 
      * the previous use.
      * 
+     * <P>When a SecurityManager is enabled, and before making any changes to 
+     * the factory, this method must confirm that 
+     * the calling access control context has been granted the 
+     * {@link #providerRegistrationSecurityPermission}
+     * 
      * @param provider The AuthConfigProvider to be registered at the factory
      *          (or null). Calling this method with a null value for this 
      *          parameter shall cause <code>getConfigProvider</code> to 
@@ -427,9 +488,8 @@ public abstract class AuthConfigFactory {
      *          used to remove the registration from the factory.
      *
      * @exception SecurityException If the caller does not have
-     *		permission to register a provider at the factory.
-     *
-     * @exception AuthException If the provider registration fails.
+     *		permission to register a provider at the factory, or 
+     *          if the provider registration fails.
      */
     public abstract String
     registerConfigProvider(AuthConfigProvider provider,
@@ -442,6 +502,11 @@ public abstract class AuthConfigFactory {
      * the persistent declarative representation of provider registrations, 
      * if appropriate) and invoke any listeners associated with the removed 
      * registration.
+     * 
+     * <P>When a SecurityManager is enabled, and before making any changes to 
+     * the factory, this method must confirm that 
+     * the calling access control context has been granted the 
+     * {@link #providerRegistrationSecurityPermission}
      *
      * @param registrationID A String that identifies a provider registration
      *          at the factory
@@ -464,12 +529,17 @@ public abstract class AuthConfigFactory {
      * <p>
      * Factories should periodically notify Listeners to effectively
      * detach listeners that are no longer in use.
+     * 
+     * <P>When a SecurityManager is enabled, and before making any changes to 
+     * the factory, this method must confirm that 
+     * the calling access control context has been granted the 
+     * {@link #providerRegistrationSecurityPermission}
      *
      * @param listener The RegistrationListener to be detached.
      *
      * @param layer A String identifying the message layer or null.
      *
-     * @param appContext A String value identifying the application contex
+     * @param appContext A String value identifying the application context
      *          or null.
      *
      * @return An array of String values where each value identifies a 
@@ -510,24 +580,27 @@ public abstract class AuthConfigFactory {
      * @return A RegistrationContext or null. When a Non-null value is
      * returned, it is a copy of the registration context corresponding to the
      * registration. Null is returned when the registration identifier does
-     * not correpond to an active registration
+     * not correspond to an active registration
       */
     public abstract RegistrationContext 
     getRegistrationContext(String registrationID);
 
    /**
-     * Cause the factory to reprocess its persisent declarative 
+     * Cause the factory to reprocess its persistent declarative 
      * representation of provider registrations. 
      *
      * <p> A factory should only replace an existing registration when 
      * a change of provider implementation class or initialization 
      * properties has occurred. 
-     *
-     * @exception AuthException If an error occured during the 
-     *          reinitialization.
+     * 
+     * <P>When a SecurityManager is enabled, and before the point where this 
+     * method could have caused any changes to the factory, this method must 
+     * confirm that the calling access control context has been granted the 
+     * {@link #providerRegistrationSecurityPermission}
      *
      * @exception SecurityException If the caller does not have permission
-     *		to refresh the factory.
+     *		to refresh the factory, or if an error occurred during the 
+     *          reinitialization.
      */
     public abstract void refresh();
 

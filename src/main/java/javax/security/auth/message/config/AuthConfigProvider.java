@@ -197,10 +197,9 @@ public interface AuthConfigProvider {
      * the corresponding authentication context configuration objects 
      * previously created by the provider within the current process context. 
      *
-     * @exception AuthException If an error occured during the refresh.
-     *
      * @exception SecurityException If the caller does not have permission
-     *		to refresh the provider.
+     *		to refresh the provider, or if an error occurred during the 
+     *          refresh.
      */
     public void refresh();
 
