@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -42,8 +42,7 @@ package javax.security.auth.message.config;
 
 import java.util.Map;
 import javax.security.auth.Subject;
-
-import javax.security.auth.message.*;
+import javax.security.auth.message.AuthException;
 
 /**
  * This interface describes a configuration of ServerAuthConfiguration objects
@@ -64,7 +63,6 @@ import javax.security.auth.message.*;
  * context to cause it to invoke the encapsulated ServerAuthModules to
  * validate service requests and to secure service responses.
  *
- * @version %I%, %G%
  * @see AuthConfigProvider
  */
 public interface ServerAuthConfig extends AuthConfig {

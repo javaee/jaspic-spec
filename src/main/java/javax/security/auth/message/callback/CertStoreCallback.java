@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -40,7 +40,6 @@
 
 package javax.security.auth.message.callback;
 
-import java.security.KeyStore;
 import java.security.cert.CertStore;
 import javax.security.auth.callback.Callback;
 
@@ -53,7 +52,6 @@ import javax.security.auth.callback.Callback;
  * Such a search may be necessary when the caller needs to
  * verify a signature.
  *
- * @version %I%, %G%
  */
 public class CertStoreCallback implements Callback {
 

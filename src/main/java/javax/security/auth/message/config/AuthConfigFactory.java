@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -43,12 +43,8 @@ package javax.security.auth.message.config;
 import java.security.Permission;
 import java.security.Security;
 import java.security.SecurityPermission;
-
 import java.util.Map;
-// for @see
 import java.util.Properties;
-
-import javax.security.auth.message.*;
 
 /**
  * This class is used to obtain <code>AuthConfigProvider</code> objects 
@@ -118,7 +114,6 @@ import javax.security.auth.message.*;
  * persistent declarative syntax as long as it conforms to the requirements 
  * defined by this class.
  *
- * @version %I%, %G%
  *
  * @see ClientAuthContext
  * @see ServerAuthContext

@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -53,7 +53,6 @@ import javax.security.auth.x500.X500Principal;
  * to obtain private keys or private key references, from key 
  * repositories available to the CallbackHandler that processes the Callback.
  *
- * @version %I%, %G%
  */
 public class PrivateKeyCallback implements Callback {
 

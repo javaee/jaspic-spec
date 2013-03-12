@@ -1,7 +1,7 @@
 /*
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
  *
- * Copyright (c) 1997-2010 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1997-2013 Oracle and/or its affiliates. All rights reserved.
  *
  * The contents of this file are subject to the terms of either the GNU
  * General Public License Version 2 only ("GPL") or the Common Development
@@ -41,7 +41,7 @@
 package javax.security.auth.message.config;
 
 import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.message.*;
+import javax.security.auth.message.AuthException;
 
 /**
  * This interface is implemented by objects that can be used to obtain
@@ -97,7 +97,6 @@ import javax.security.auth.message.*;
  *                        String appContext, String description);
  * </code>
  * </pre>
- * @version %I%, %G%
  *
  * @see ClientAuthContext
  * @see ServerAuthContext
