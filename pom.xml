@@ -72,7 +72,7 @@
     <developers>
         <developer>
             <id>monzillo</id>
-            <name>Ronal Monzillo</name>
+            <name>Ronald Monzillo</name>
             <organization>Oracle, Inc.</organization>
             <roles>
                 <role>lead</role>
@@ -215,22 +215,36 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8</version>
+                <version>2.8.1</version>
+                <configuration>
+                    <groups>
+                        <group>
+                            <title>JASPIC API Documentation</title>
+                            <packages>
+                                javax.security.auth.message
+                                javax.security.auth.message.callback
+                                javax.security.auth.message.config
+                                javax.security.auth.message.module
+                            </packages>
+                        </group>
+                    </groups>
+                    <bottom>
+<![CDATA[Copyright &#169; 1997-2013,
+    <a href="http://www.oracle.com">Oracle</a>
+    and/or its affiliates. All Rights Reserved.
+    Use is subject to
+    <a href="{@docRoot}/doc-files/speclicense.html" target="_top">license terms</a>.
+    <br>Comments to : users@jaspic-spec.java.net
+]]>
+                    </bottom>
+                </configuration>
                 <executions>
                     <execution>
-                        <phase>javadoc</phase>
+                        <id>attach-javadocs</id>
                         <goals>
-                            <goal>javadoc</goal>
+                            <goal>jar</goal>
                         </goals>
-                        <configuration>
-                            <groups>
-                                <group>
-                                    <title>JASPIC API Documentation</title>
-                                    <packages>javax.security.auth.message</packages>
-                                </group>
-                            </groups>
-                        </configuration>
-                    </execution>
+                     </execution>
                 </executions>
             </plugin>     
             <plugin>
