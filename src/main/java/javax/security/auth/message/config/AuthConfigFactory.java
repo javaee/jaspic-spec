@@ -267,8 +267,7 @@ public abstract class AuthConfigFactory {
 				}
 			    });
 		} catch (java.security.PrivilegedActionException pae) {
-		    throw (SecurityException)
-			new SecurityException().initCause(pae.getException());
+		    throw new SecurityException(pae.getException());
 		} 
 	    }
 	} 
