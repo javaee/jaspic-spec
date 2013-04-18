@@ -55,11 +55,9 @@
     <version>1.1-SNAPSHOT</version>
 
     <properties>
+        <non.final>false</non.final>
         <extension.name>javax.security.auth.message</extension.name>
-        <bundle.symbolicName>javax.security.auth.message</bundle.symbolicName>         
         <spec.version>1.1</spec.version>
-        <vendor.name>Oracle Corporation</vendor.name>
-        <implementation.vendor.id>org.glassfish</implementation.vendor.id>
         <findbugs.version>2.4.0</findbugs.version>
         <findbugs.skip>false</findbugs.skip>
         <findbugs.exclude>exclude-common.xml</findbugs.exclude>
@@ -137,6 +135,28 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.glassfish.build</groupId>
+                <artifactId>spec-version-maven-plugin</artifactId>
+                <version>1.2</version>
+                <configuration>
+                    <spec>
+                        <nonFinal>${non.final}</nonFinal>
+                        <jarType>api</jarType>
+                        <specVersion>${spec.version}</specVersion>
+                        <specImplVersion>${project.version}</specImplVersion>
+                        <apiPackage>${extension.name}</apiPackage>
+                    </spec>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>set-spec-properties</goal>
+                            <goal>check-module</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <version>1.4.3</version>
@@ -145,17 +165,18 @@
                         <supportedProjectType>jar</supportedProjectType>
                     </supportedProjectTypes>
                     <instructions>
-                        <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+                        <Bundle-Version>${spec.bundle.version}</Bundle-Version>
+                        <Bundle-SymbolicName>${spec.bundle.symbolic-name}</Bundle-SymbolicName>
+                        <Extension-Name>${spec.extension.name}</Extension-Name>
+                        <Implementation-Version>${spec.implementation.version}</Implementation-Version>
+                        <Specification-Version>${spec.specification.version}</Specification-Version>                        
                         <Bundle-Description>
                             JASPIC API ${spec.version} Design Specification
                         </Bundle-Description>
-                        <Extension-Name>${extension.name}</Extension-Name>
-                        <Specification-Version>${spec.version}</Specification-Version>
-                        <Specification-Vendor>${vendor.name}</Specification-Vendor>
-                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <Specification-Vendor>Oracle Corporation</Specification-Vendor>
                         <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-                        <Implementation-Vendor-Id>${implementation.vendor.id}</Implementation-Vendor-Id>
-			<_include>-${basedir}/osgi.bundle</_include>
+                        <Implementation-Vendor-Id>org.glassfish</Implementation-Vendor-Id>
+                        <_include>-${basedir}/osgi.bundle</_include>
                     </instructions>
                 </configuration>
                 <executions>
@@ -289,4 +310,5 @@
             </plugin>
         </plugins>
     </build>
+    <dependencies></dependencies>
 </project>
