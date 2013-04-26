@@ -52,7 +52,7 @@
 
     <groupId>javax.security.auth.message</groupId>
     <artifactId>javax.security.auth.message-api</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
     <properties>
         <non.final>false</non.final>
@@ -310,5 +310,5 @@
             </plugin>
         </plugins>
     </build>
-    <dependencies></dependencies>
+    <dependencies />
 </project>
