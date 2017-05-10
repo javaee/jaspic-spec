@@ -1,0 +1,16 @@
+theme: jekyll-theme-architect
+
+title: [jaspic-spec]
+description: [Maintenance Project for the JASPIC Specification, JSR-196]
+
+# sidebar links url
+links:
+  source: https://github.com/javaee/jaspic-spec
+  #download:
+  #mailinglist:
+  #javadocs:
+  #docs:
+  #faq:
+  #mailinglist:
+  #hide_issuetracker: true #set explicitly to 'true' if you don't want to have the issue tracker link displayed
+
